@@ -115,16 +115,16 @@ void BFSPrint(Trie trie) {
     free(queue);
 }
 
-void countLeafs(TrieNode *root, int *numberOfLeafs) {
-    if (root == NULL)
+void countLeafs(TrieNode *node, int *numberOfLeafs) {
+    if (node == NULL)
         return;
     for (int i = 0; i < 27; i++) {
-        if (root->children[i] != NULL) {
-            if (root->children[i]->data != NULL) {
-                if (*(char *)root->children[i]->data == '$')
+        if (node->children[i] != NULL) {
+            if (node->children[i]->data != NULL) {
+                if (*(char *)node->children[i]->data == '$')
                     (*numberOfLeafs)++;
             }
-            countLeafs(root->children[i], numberOfLeafs);
+            countLeafs(node->children[i], numberOfLeafs);
         }
     }
 }
@@ -132,6 +132,45 @@ void countLeafs(TrieNode *root, int *numberOfLeafs) {
 void getNumberOfLeafs(TrieNode *root, int *numberOfLeafs) {
     if (root->isRoot)
         countLeafs(root, numberOfLeafs);
+    else {
+        printf("You need to give me the root of the tree.");
+        return;
+    }
+}
+
+void countSuffixes(TrieNode *node, int k, int *numberOfLetters, int *numberOfSuffixes) {
+    if (node == NULL)
+        return;
+
+    if (!node->isRoot) {
+        if (*(char *)node->data == '$') {
+            if (k == *numberOfLetters)
+                (*numberOfSuffixes)++;
+        }
+    }
+    for (int i = 0; i < 27; i++) {
+        if (node->children[i] != NULL) {
+            if (node->children[i]->data != NULL) {
+                if (*(char *)node->children[i]->data != '$')
+                    (*numberOfLetters)++;
+            }
+            countSuffixes(node->children[i], k, numberOfLetters, numberOfSuffixes);
+            // cand urc inapoi in arbore scad numarul de litere pe care 
+            // le-am adunat pana in prezent
+            if (node->children[i]->data != NULL) {
+                if (*(char *)node->children[i]->data != '$')
+                    (*numberOfLetters)--;
+            }
+        }
+    }
+}
+
+void getNumberOfKSuffixes(TrieNode *root, int k, int *numberOfLetters, int *numberOfSuffixes) {
+    if (root->isRoot) {
+        *numberOfLetters = 0;
+        *numberOfSuffixes = 0;
+        countSuffixes(root, k, numberOfLetters, numberOfSuffixes);
+    }
     else {
         printf("You need to give me the root of the tree.");
         return;

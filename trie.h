@@ -21,4 +21,5 @@ void insert(Trie trie, void *data);
 void BFSPrint(Trie trie);
 void destoryTrie(Trie trie);
 void getNumberOfLeafs(TrieNode *root, int *numberOfLeafs);
+void getNumberOfKSuffixes(TrieNode *root, int k, int *numberOfLetters, int *numberOfSuffixes);
 #endif

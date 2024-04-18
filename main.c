@@ -6,4 +6,5 @@ int main() {
     Trie trie = createTrie();
     insert(trie, "banana");
     BFSPrint(trie);
+    destoryTrie(trie);
 }

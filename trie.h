@@ -17,4 +17,5 @@ typedef struct Trie {
 Trie createTrie();
 void insert(Trie trie, void *data);
 void BFSPrint(Trie trie);
+void destoryTrie(Trie trie);
 #endif

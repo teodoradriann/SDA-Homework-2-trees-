@@ -1,10 +1,13 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include "trie.h"
+#include "utils.h"
 
 int main() {
     Trie trie = createTrie();
+    int numberOfLeafs = 0;
     insert(trie, "banana");
-    BFSPrint(trie);
+    getNumberOfLeafs(trie->root, &numberOfLeafs);
+    printf("%d", numberOfLeafs);
+    //BFSPrint(trie);
     destoryTrie(trie);
 }

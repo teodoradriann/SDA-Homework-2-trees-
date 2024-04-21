@@ -1,0 +1,22 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     main
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100002F20, symSize: 0x6C }
+  - { offsetInCU: 0x41, offset: 0x41, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100002F20, symSize: 0x6C }
+  - { offsetInCU: 0x26, offset: 0x173, size: 0x8, addend: 0x0, symName: _createTrieNode, symObjAddr: 0x0, symBinAddr: 0x100002F8C, symSize: 0xC0 }
+  - { offsetInCU: 0x47, offset: 0x194, size: 0x8, addend: 0x0, symName: _createTrieNode, symObjAddr: 0x0, symBinAddr: 0x100002F8C, symSize: 0xC0 }
+  - { offsetInCU: 0x8B, offset: 0x1D8, size: 0x8, addend: 0x0, symName: _createTrie, symObjAddr: 0xC0, symBinAddr: 0x10000304C, symSize: 0x68 }
+  - { offsetInCU: 0xB3, offset: 0x200, size: 0x8, addend: 0x0, symName: _insert, symObjAddr: 0x128, symBinAddr: 0x1000030B4, symSize: 0x228 }
+  - { offsetInCU: 0x19B, offset: 0x2E8, size: 0x8, addend: 0x0, symName: _BFSPrint, symObjAddr: 0x350, symBinAddr: 0x1000032DC, symSize: 0x2D8 }
+  - { offsetInCU: 0x22D, offset: 0x37A, size: 0x8, addend: 0x0, symName: _countLeafs, symObjAddr: 0x628, symBinAddr: 0x1000035B4, symSize: 0x108 }
+  - { offsetInCU: 0x27B, offset: 0x3C8, size: 0x8, addend: 0x0, symName: _getNumberOfLeafs, symObjAddr: 0x730, symBinAddr: 0x1000036BC, symSize: 0x50 }
+  - { offsetInCU: 0x2AD, offset: 0x3FA, size: 0x8, addend: 0x0, symName: _countSuffixes, symObjAddr: 0x780, symBinAddr: 0x10000370C, symSize: 0x1E0 }
+  - { offsetInCU: 0x317, offset: 0x464, size: 0x8, addend: 0x0, symName: _getNumberOfKSuffixes, symObjAddr: 0x960, symBinAddr: 0x1000038EC, symSize: 0x70 }
+  - { offsetInCU: 0x365, offset: 0x4B2, size: 0x8, addend: 0x0, symName: _countChildren, symObjAddr: 0x9D0, symBinAddr: 0x10000395C, symSize: 0x134 }
+  - { offsetInCU: 0x3DD, offset: 0x52A, size: 0x8, addend: 0x0, symName: _getMaxNumberOfChildren, symObjAddr: 0xB04, symBinAddr: 0x100003A90, symSize: 0x58 }
+  - { offsetInCU: 0x40F, offset: 0x55C, size: 0x8, addend: 0x0, symName: _findSuffix, symObjAddr: 0xB5C, symBinAddr: 0x100003AE8, symSize: 0x1B0 }
+  - { offsetInCU: 0x479, offset: 0x5C6, size: 0x8, addend: 0x0, symName: _destoryTrie, symObjAddr: 0xD0C, symBinAddr: 0x100003C98, symSize: 0x1E4 }
+  - { offsetInCU: 0x26, offset: 0x942, size: 0x8, addend: 0x0, symName: _checkMalloc, symObjAddr: 0x0, symBinAddr: 0x100003E7C, symSize: 0x4C }
+  - { offsetInCU: 0x42, offset: 0x95E, size: 0x8, addend: 0x0, symName: _checkMalloc, symObjAddr: 0x0, symBinAddr: 0x100003E7C, symSize: 0x4C }
+...

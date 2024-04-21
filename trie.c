@@ -18,7 +18,7 @@ TrieNode *createTrieNode(Trie trie, void *data) {
     newNode->parent = NULL;
     newNode->isRoot = false;
     // setez tot vectorul de copii la 0 pentru nodul nou aloca;
-    memset(newNode->children, 0, 27 * sizeof(TrieNode *));
+    memset(newNode->children, 0, CHILDREN_NUMBER * sizeof(TrieNode *));
     return newNode;
 }
 
@@ -54,7 +54,7 @@ void insert(Trie trie, void *data) {
             if (node->children[index] == NULL) {
                 char *data = malloc(sizeof(char *));
                 checkMalloc(data);
-                *data = word[i];
+                *data = word[j];
                 node->children[index] = createTrieNode(trie, data);
                 node->children[index]->parent = node;
                 trie->nodeCount++;
@@ -79,7 +79,7 @@ void BFSPrint(Trie trie) {
     int front = 0;
     int rear = 0;
 
-    for (int i = 0; i < 27; i++) {
+    for (int i = 0; i < CHILDREN_NUMBER; i++) {
         if (trie->root->children[i] != NULL) {
             queue[rear++] = trie->root->children[i];
         }
@@ -100,7 +100,7 @@ void BFSPrint(Trie trie) {
             }
         } else {
             printf("%c ", *(char *)node->data);
-            for (int i = 0; i < 27; i++) {
+            for (int i = 0; i < CHILDREN_NUMBER; i++) {
                 if (node->children[i] != NULL) {
                     if (rear == trie->nodeCount) {
                         queue = realloc(queue, trie->nodeCount * 2 * sizeof(TrieNode*));
@@ -118,7 +118,7 @@ void BFSPrint(Trie trie) {
 void countLeafs(TrieNode *node, int *numberOfLeafs) {
     if (node == NULL)
         return;
-    for (int i = 0; i < 27; i++) {
+    for (int i = 0; i < CHILDREN_NUMBER; i++) {
         if (node->children[i] != NULL) {
             if (node->children[i]->data != NULL) {
                 if (*(char *)node->children[i]->data == '$')
@@ -148,7 +148,7 @@ void countSuffixes(TrieNode *node, int k, int *numberOfLetters, int *numberOfSuf
                 (*numberOfSuffixes)++;
         }
     }
-    for (int i = 0; i < 27; i++) {
+    for (int i = 0; i < CHILDREN_NUMBER; i++) {
         if (node->children[i] != NULL) {
             if (node->children[i]->data != NULL) {
                 if (*(char *)node->children[i]->data != '$')
@@ -182,7 +182,7 @@ void countChildren(TrieNode *node, int *maxChildren) {
         return;
     
     int cntr = 0;
-    for (int i = 0; i < 27; i++) {
+    for (int i = 0; i < CHILDREN_NUMBER; i++) {
         if (node->children[i] != NULL) {
             cntr++;
         }
@@ -191,7 +191,7 @@ void countChildren(TrieNode *node, int *maxChildren) {
     if (cntr > *maxChildren) 
         *maxChildren = cntr;
 
-    for (int i = 0; i < 27; i++) {
+    for (int i = 0; i < CHILDREN_NUMBER; i++) {
         if (node->children[i] != NULL) {
            countChildren(node->children[i], maxChildren);
         }
@@ -208,6 +208,35 @@ void getMaxNumberOfChildren(TrieNode *root, int *maxChildren) {
     }
 }
 
+void findSuffix(TrieNode *node, char *word, int *i, FILE *file) {
+    // if (node == NULL || word == NULL || file == NULL)
+    //     return;
+    if (*i == strlen(word)) {
+        if (node->children[0] != NULL) {
+            printf("1\n");
+            //fprintf(file, "1\n");
+            return;
+        } else {
+            printf("0\n");
+            //printf(file, "0\n");
+            return;
+        } 
+    }
+    for (int j = 0; j < CHILDREN_NUMBER; j++) {
+        if (node->children[j] != NULL) {
+            if (node->children[j]->data != NULL) {
+                if (*(char *)node->children[j]->data == word[*i]) {
+                    (*i)++;
+                    findSuffix(node->children[j], word, i, file);
+                    return;
+                }
+            }
+        }
+    }
+    printf("0\n");
+    //fprintf(file, "0\n");
+}
+
 void destoryTrie(Trie trie) {
     TrieNode** queue = malloc(trie->nodeCount * sizeof(TrieNode*));
     checkMalloc(queue);
@@ -215,7 +244,7 @@ void destoryTrie(Trie trie) {
     int front = 0;
     int rear = 0;
 
-    for (int i = 0; i < 27; i++) {
+    for (int i = 0; i < CHILDREN_NUMBER; i++) {
         if (trie->root->children[i] != NULL) {
             queue[rear++] = trie->root->children[i];
         }
@@ -226,7 +255,7 @@ void destoryTrie(Trie trie) {
         if (node->data != NULL) {
             free(node->data);
         }
-        for (int i = 0; i < 27; i++) {
+        for (int i = 0; i < CHILDREN_NUMBER; i++) {
             if (node->children[i] != NULL) {
                 queue[rear++] = node->children[i];
             }

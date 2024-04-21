@@ -4,16 +4,9 @@
 
 int main() {
     Trie trie = createTrie();
-    //int numberOfLeafs = 0;
     insert(trie, "banana");
-    // int k = 3;
-    // int numberOfLetters;
-    // int numberOfSuffixes;
-    // getNumberOfKSuffixes(trie->root, k, &numberOfLetters, &numberOfSuffixes);
-    // printf("%d", numberOfSuffixes);
-    //BFSPrint(trie);
-    int maxChildren;
-    getMaxNumberOfChildren(trie->root, &maxChildren);
-    printf("%d", maxChildren);
+    BFSPrint(trie);
+    int i = 0;
+    findSuffix(trie->root, "ana", &i, NULL);
     destoryTrie(trie);
 }

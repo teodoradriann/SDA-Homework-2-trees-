@@ -177,6 +177,37 @@ void getNumberOfKSuffixes(TrieNode *root, int k, int *numberOfLetters, int *numb
     }
 }
 
+void countChildren(TrieNode *node, int *maxChildren) {
+    if (node == NULL)
+        return;
+    
+    int cntr = 0;
+    for (int i = 0; i < 27; i++) {
+        if (node->children[i] != NULL) {
+            cntr++;
+        }
+    }
+
+    if (cntr > *maxChildren) 
+        *maxChildren = cntr;
+
+    for (int i = 0; i < 27; i++) {
+        if (node->children[i] != NULL) {
+           countChildren(node->children[i], maxChildren);
+        }
+    }
+}
+
+void getMaxNumberOfChildren(TrieNode *root, int *maxChildren) {
+    if (root->isRoot) {
+        *maxChildren = 0;
+        countChildren(root, maxChildren);
+    } else {
+        printf("You need to give me the root of the tree.");
+        return;
+    }
+}
+
 void destoryTrie(Trie trie) {
     TrieNode** queue = malloc(trie->nodeCount * sizeof(TrieNode*));
     checkMalloc(queue);

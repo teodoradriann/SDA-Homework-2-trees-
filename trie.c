@@ -11,9 +11,9 @@ TrieNode *createTrieNode(Trie trie, void *data) {
         newNode->data = NULL;
     }
     else {
-        newNode->data = malloc(trie->dataSize);
+        newNode->data = malloc(1);
         checkMalloc(newNode->data);
-        memcpy(newNode->data, data, trie->dataSize);
+        memcpy(newNode->data, data, 1);
     }
     newNode->parent = NULL;
     newNode->isRoot = false;
@@ -22,10 +22,10 @@ TrieNode *createTrieNode(Trie trie, void *data) {
     return newNode;
 }
 
-Trie createTrie() {
+Trie createTrie(size_t dataSize) {
     Trie trie = malloc(sizeof(struct Trie));
     checkMalloc(trie);
-    trie->dataSize = sizeof(char *);
+    trie->dataSize = dataSize;
     trie->root = createTrieNode(trie, NULL);
     trie->nodeCount = 0;
     trie->root->isRoot = true;
@@ -35,7 +35,7 @@ Trie createTrie() {
 void insert(Trie trie, void *data) {
     char *word = (char *)data;
     int wordLength = strlen(word);
-    char *endOfWord = malloc(sizeof(char *));
+    char *endOfWord = malloc(trie->dataSize);
     checkMalloc(endOfWord);
     *endOfWord = '$';
     // daca trie-ul e gol, voi adauga direct $ care va ramane
@@ -52,7 +52,7 @@ void insert(Trie trie, void *data) {
             // calculez index-ul din vectorul children
             int index = word[j] - 'a' + 1;
             if (node->children[index] == NULL) {
-                char *data = malloc(sizeof(char *));
+                char *data = malloc(trie->dataSize);
                 checkMalloc(data);
                 *data = word[j];
                 node->children[index] = createTrieNode(trie, data);

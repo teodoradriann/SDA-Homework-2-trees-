@@ -4,9 +4,9 @@
 
 int main() {
     Trie trie = createTrie();
+    FILE* output = fopen("output.txt", "w");
     insert(trie, "banana");
-    BFSPrint(trie);
-    int i = 0;
-    findSuffix(trie->root, "ana", &i, NULL);
+    BFSPrint(trie, output);
     destoryTrie(trie);
+    fclose(output);
 }

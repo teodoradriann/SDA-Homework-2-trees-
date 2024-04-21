@@ -71,7 +71,9 @@ void insert(Trie trie, void *data) {
 }
 
 // voi utiliza o parcurgere BFS pentru a printa Trie-ul
-void BFSPrint(Trie trie) {
+void BFSPrint(Trie trie, FILE *file) {
+    if (file == NULL)
+        return;
     // pointer la un vector de structuri TrieNode
     TrieNode** queue = malloc(trie->nodeCount * sizeof(TrieNode*));
     checkMalloc(queue);
@@ -90,7 +92,7 @@ void BFSPrint(Trie trie) {
     while (front != rear) {
         TrieNode *node = queue[front++];
         if (node == NULL) {
-            printf("\n");
+            fprintf(file, "\n");
             if (front != rear) {
                 if (rear == trie->nodeCount) {
                     queue = realloc(queue, trie->nodeCount * 2 * sizeof(TrieNode*));
@@ -99,7 +101,7 @@ void BFSPrint(Trie trie) {
                 queue[rear++] = NULL;
             }
         } else {
-            printf("%c ", *(char *)node->data);
+            fprintf(file, "%c ", *(char *)node->data);
             for (int i = 0; i < CHILDREN_NUMBER; i++) {
                 if (node->children[i] != NULL) {
                     if (rear == trie->nodeCount) {
@@ -129,11 +131,13 @@ void countLeafs(TrieNode *node, int *numberOfLeafs) {
     }
 }
 
-void getNumberOfLeafs(TrieNode *root, int *numberOfLeafs) {
+void getNumberOfLeafs(TrieNode *root, int *numberOfLeafs, FILE *file) {
+    if (file == NULL)
+        return;
     if (root->isRoot)
         countLeafs(root, numberOfLeafs);
     else {
-        printf("You need to give me the root of the tree.");
+        fprintf(file, "You need to give me the root of the tree.");
         return;
     }
 }
@@ -165,14 +169,17 @@ void countSuffixes(TrieNode *node, int k, int *numberOfLetters, int *numberOfSuf
     }
 }
 
-void getNumberOfKSuffixes(TrieNode *root, int k, int *numberOfLetters, int *numberOfSuffixes) {
+void getNumberOfKSuffixes(TrieNode *root, int k, int *numberOfLetters,
+                          int *numberOfSuffixes, FILE *file) {
+    if (file == NULL)
+        return;
     if (root->isRoot) {
         *numberOfLetters = 0;
         *numberOfSuffixes = 0;
         countSuffixes(root, k, numberOfLetters, numberOfSuffixes);
     }
     else {
-        printf("You need to give me the root of the tree.");
+        fprintf(file, "You need to give me the root of the tree.");
         return;
     }
 }
@@ -198,27 +205,27 @@ void countChildren(TrieNode *node, int *maxChildren) {
     }
 }
 
-void getMaxNumberOfChildren(TrieNode *root, int *maxChildren) {
+void getMaxNumberOfChildren(TrieNode *root, int *maxChildren, FILE *file) {
+    if (file == NULL)
+        return;
     if (root->isRoot) {
         *maxChildren = 0;
         countChildren(root, maxChildren);
     } else {
-        printf("You need to give me the root of the tree.");
+        fprintf(file, "You need to give me the root of the tree.");
         return;
     }
 }
 
 void findSuffix(TrieNode *node, char *word, int *i, FILE *file) {
-    // if (node == NULL || word == NULL || file == NULL)
-    //     return;
+    if (node == NULL || word == NULL || file == NULL)
+        return;
     if (*i == strlen(word)) {
         if (node->children[0] != NULL) {
-            printf("1\n");
-            //fprintf(file, "1\n");
+            fprintf(file, "1\n");
             return;
         } else {
-            printf("0\n");
-            //printf(file, "0\n");
+            fprintf(file, "0\n");
             return;
         } 
     }
@@ -233,8 +240,7 @@ void findSuffix(TrieNode *node, char *word, int *i, FILE *file) {
             }
         }
     }
-    printf("0\n");
-    //fprintf(file, "0\n");
+    fprintf(file, "0\n");
 }
 
 void destoryTrie(Trie trie) {

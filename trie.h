@@ -19,10 +19,11 @@ typedef struct Trie {
 
 Trie createTrie();
 void insert(Trie trie, void *data);
-void BFSPrint(Trie trie);
-void getNumberOfLeafs(TrieNode *root, int *numberOfLeafs);
-void getNumberOfKSuffixes(TrieNode *root, int k, int *numberOfLetters, int *numberOfSuffixes);
-void getMaxNumberOfChildren(TrieNode *root, int *maxChildren);
+void BFSPrint(Trie trie, FILE *file);
+void getNumberOfLeafs(TrieNode *root, int *numberOfLeafs, FILE *file);
+void getNumberOfKSuffixes(TrieNode *root, int k, int *numberOfLetters,
+                          int *numberOfSuffixes, FILE *file);
+void getMaxNumberOfChildren(TrieNode *root, int *maxChildren, FILE *file);
 void findSuffix(TrieNode *node, char *word, int *i, FILE *file);
 void destoryTrie(Trie trie);
 

@@ -11,9 +11,9 @@ TrieNode *createTrieNode(Trie trie, void *data) {
         newNode->data = NULL;
     }
     else {
-        newNode->data = malloc(1);
+        newNode->data = malloc(strlen((char *)data) + 1);
         checkMalloc(newNode->data);
-        memcpy(newNode->data, data, 1);
+        memcpy(newNode->data, data, strlen((char *)data) + 1);
     }
     newNode->parent = NULL;
     newNode->isRoot = false;
@@ -35,9 +35,10 @@ Trie createTrie(size_t dataSize) {
 void insert(Trie trie, void *data) {
     char *word = (char *)data;
     int wordLength = strlen(word);
-    char *endOfWord = malloc(trie->dataSize);
+    char *endOfWord = malloc(2);
     checkMalloc(endOfWord);
     *endOfWord = '$';
+    *(endOfWord + 1) = '\0';
     // daca trie-ul e gol, voi adauga direct $ care va ramane
     // acolo pe toata durata de viata a trie-ului deoarece
     // fiecare cuvant are un $ la sfarsit
@@ -52,9 +53,10 @@ void insert(Trie trie, void *data) {
             // calculez index-ul din vectorul children
             int index = word[j] - 'a' + 1;
             if (node->children[index] == NULL) {
-                char *data = malloc(trie->dataSize);
+                char *data = malloc(2);
                 checkMalloc(data);
                 *data = word[j];
+                *(data + 1) = '\0';
                 node->children[index] = createTrieNode(trie, data);
                 node->children[index]->parent = node;
                 trie->nodeCount++;
@@ -101,7 +103,7 @@ void BFSPrint(Trie trie, FILE *file) {
                 queue[rear++] = NULL;
             }
         } else {
-            fprintf(file, "%c ", *(char *)node->data);
+            fprintf(file, "%s ", (char *)node->data);
             for (int i = 0; i < CHILDREN_NUMBER; i++) {
                 if (node->children[i] != NULL) {
                     if (rear == trie->nodeCount) {

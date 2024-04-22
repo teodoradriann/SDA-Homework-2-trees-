@@ -8,3 +8,10 @@ void checkMalloc(void *data) {
         exit(0);
     }
 }
+
+void checkFile(FILE *file) {
+    if (file == NULL) {
+        printf("The input file was not found. Exiting...");
+        exit(0);
+    }
+}

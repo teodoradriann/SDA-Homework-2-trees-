@@ -3,8 +3,11 @@
 #include "utils.h"
 
 int main() {
-    Trie trie = createTrie(sizeof(char *));
+    FILE* input = fopen("input.txt", "r");
+    checkFile(input);
     FILE* output = fopen("output.txt", "w");
+    Trie trie = createTrie(sizeof(char *));
+
     makeCompactTrie(trie, "banana");
     BFSPrint(trie, output);
     destoryTrie(trie);

@@ -287,7 +287,7 @@ void makeCompactTrie(Trie trie, char *data) {
                 node = node->children[firstLetter];
                 lenDataNode = strlen((char *)node->data);
                 suffix = suffix + lenDataNode;
-                int firstLetter = suffix[0] - 'a' + 1;
+                firstLetter = suffix[0] - 'a' + 1;
             }
             if (suffix[0] != '\0') {
                 node->children[firstLetter] = createTrieNode(trie, suffix);

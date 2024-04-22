@@ -21,7 +21,6 @@ TrieNode *createTrieNode(Trie trie, void *data) {
             memcpy(newNode->data, data, strlen((char *)data) + 1);
         }
     }
-    newNode->parent = NULL;
     newNode->isRoot = false;
     // setez tot vectorul de copii la 0 pentru nodul nou aloca;
     memset(newNode->children, 0, CHILDREN_NUMBER * sizeof(TrieNode *));
@@ -64,7 +63,6 @@ void insertByLetter(Trie trie, void *data) {
                 *data = word[j];
                 *(data + 1) = '\0';
                 node->children[index] = createTrieNode(trie, data);
-                node->children[index]->parent = node;
                 trie->nodeCount++;
                 free(data);
             }
@@ -280,7 +278,6 @@ void makeCompactTrie(Trie trie, char *data) {
         int firstLetter = suffix[0] - 'a' + 1;
         if (node->children[firstLetter] == NULL) {
             node->children[firstLetter] = createTrieNode(trie, suffix);
-            node->children[firstLetter]->parent = node;
             trie->nodeCount++;
         } else {
             while (node->children[firstLetter] != NULL) {
@@ -291,7 +288,6 @@ void makeCompactTrie(Trie trie, char *data) {
             }
             if (suffix[0] != '\0') {
                 node->children[firstLetter] = createTrieNode(trie, suffix);
-                node->children[firstLetter]->parent = node;
                 trie->nodeCount++;
             }
         }

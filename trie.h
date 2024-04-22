@@ -6,7 +6,6 @@
 
 typedef struct TrieNode {
     void *data;
-    struct TrieNode *parent;
     struct TrieNode *children[CHILDREN_NUMBER];
     bool isRoot;
 } TrieNode;

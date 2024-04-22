@@ -5,7 +5,7 @@
 int main() {
     Trie trie = createTrie(sizeof(char *));
     FILE* output = fopen("output.txt", "w");
-    insert(trie, "banana");
+    makeCompactTrie(trie, "banana");
     BFSPrint(trie, output);
     destoryTrie(trie);
     fclose(output);

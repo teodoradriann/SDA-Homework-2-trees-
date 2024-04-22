@@ -7,13 +7,19 @@
 TrieNode *createTrieNode(Trie trie, void *data) {
     TrieNode *newNode = malloc(sizeof(TrieNode));
     checkMalloc(newNode);
+    // pasez NULL functiei doar pentru radacina
     if (data == NULL) {
         newNode->data = NULL;
     }
     else {
-        newNode->data = malloc(strlen((char *)data) + 1);
-        checkMalloc(newNode->data);
-        memcpy(newNode->data, data, strlen((char *)data) + 1);
+        // daca avem o trie in care un nod e un singur caracter sau un string
+        // atunci vom face aceeasi idee de alocare,lungimea stringului + 1 (\0)
+        // pentru alte cazuri de trie alte if-uri cu alocarile de rigoare
+        if (trie->dataSize == sizeof(char) || trie->dataSize == sizeof(char *)) {
+            newNode->data = malloc(strlen((char *)data) + 1);
+            checkMalloc(newNode->data);
+            memcpy(newNode->data, data, strlen((char *)data) + 1);
+        }
     }
     newNode->parent = NULL;
     newNode->isRoot = false;
@@ -32,7 +38,7 @@ Trie createTrie(size_t dataSize) {
     return trie;
 }
 
-void insert(Trie trie, void *data) {
+void insertByLetter(Trie trie, void *data) {
     char *word = (char *)data;
     int wordLength = strlen(word);
     char *endOfWord = malloc(2);
@@ -219,7 +225,7 @@ void getMaxNumberOfChildren(TrieNode *root, int *maxChildren, FILE *file) {
     }
 }
 
-void findSuffix(TrieNode *node, char *word, int *i, FILE *file) {
+void searchSuffix(TrieNode *node, char *word, int *i, FILE *file) {
     if (node == NULL || word == NULL || file == NULL)
         return;
     if (*i == strlen(word)) {
@@ -236,13 +242,66 @@ void findSuffix(TrieNode *node, char *word, int *i, FILE *file) {
             if (node->children[j]->data != NULL) {
                 if (*(char *)node->children[j]->data == word[*i]) {
                     (*i)++;
-                    findSuffix(node->children[j], word, i, file);
+                    searchSuffix(node->children[j], word, i, file);
                     return;
                 }
             }
         }
     }
     fprintf(file, "0\n");
+}
+
+void makeCompactTrie(Trie trie, char *data) {
+    if (trie == NULL || data == NULL)
+        return;
+    if (trie->dataSize != sizeof(char *)) {
+        printf("Nu ai definit o trie cu suficient "
+        "spatiu in noduri pentru a fi compacta.\n");
+        return;
+    }
+    char *word = (char *)data;
+    int wordLength = strlen(word);
+    char *endOfWord = malloc(2);
+    checkMalloc(endOfWord);
+    *endOfWord = '$';
+    *(endOfWord + 1) = '\0';
+    // daca trie-ul e gol, voi adauga direct $ care va ramane
+    // acolo pe toata durata de viata a trie-ului deoarece
+    // fiecare cuvant are un $ la sfarsit
+    if (trie->root->children[0] == NULL) {
+        trie->root->children[0] = createTrieNode(trie, endOfWord);
+        trie->nodeCount++;
+    }
+    for (int i = wordLength - 1; i >= 0; i--) {
+        // plec din root
+        TrieNode *node = trie->root;
+        int lenDataNode = 0;
+        char *suffix = word + i;
+        int firstLetter = suffix[0] - 'a' + 1;
+        if (node->children[firstLetter] == NULL) {
+            node->children[firstLetter] = createTrieNode(trie, suffix);
+            node->children[firstLetter]->parent = node;
+            trie->nodeCount++;
+        } else {
+            while (node->children[firstLetter] != NULL) {
+                node = node->children[firstLetter];
+                lenDataNode = strlen((char *)node->data);
+                suffix = suffix + lenDataNode;
+                int firstLetter = suffix[0] - 'a' + 1;
+            }
+            if (suffix[0] != '\0') {
+                node->children[firstLetter] = createTrieNode(trie, suffix);
+                node->children[firstLetter]->parent = node;
+                trie->nodeCount++;
+            }
+        }
+        node = node->children[firstLetter];
+        if (node->children[0] == NULL) {
+            node->children[0] = createTrieNode(trie, endOfWord);
+            trie->nodeCount++;
+        }
+    }
+    free(endOfWord);
 }
 
 void destoryTrie(Trie trie) {

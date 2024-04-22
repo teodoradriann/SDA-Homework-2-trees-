@@ -1,7 +1,4 @@
-$ a b n 
-$ n a a 
-a n $ n 
-$ n a a 
-a n $ 
-$ a 
+$ a banana na 
+$ na $ $ na 
+$ na $ 
 $ 

@@ -18,7 +18,7 @@ typedef struct Trie {
 } *Trie;
 
 Trie createTrie(size_t dataSize);
-void insert(Trie trie, void *data);
+void insertByLetter(Trie trie, void *data);
 void BFSPrint(Trie trie, FILE *file);
 void getNumberOfLeafs(TrieNode *root, int *numberOfLeafs, FILE *file);
 void getNumberOfKSuffixes(TrieNode *root, int k, int *numberOfLetters,
@@ -26,5 +26,5 @@ void getNumberOfKSuffixes(TrieNode *root, int k, int *numberOfLetters,
 void getMaxNumberOfChildren(TrieNode *root, int *maxChildren, FILE *file);
 void searchSuffix(TrieNode *root, char *word, int *i, FILE *file);
 void destoryTrie(Trie trie);
-
+void makeCompactTrie(Trie trie, char *data);
 #endif

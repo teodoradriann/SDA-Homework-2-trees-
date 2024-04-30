@@ -97,11 +97,11 @@ int main(int argc, char *argv[]) {
         }
         destoryTrie(trie);
     } else if (strcmp(task, "-c4") == 0) {
-        Trie trie = createTrie(sizeof(char));
+        Trie trie = createTrie(sizeof(char *));
         checkMalloc(trie);
 
         readData(trie, data, input, insertByLetter);
-        transformInCompactTrie(trie->root);
+        transformInCompactTrie(trie, trie->root);
 
         BFSPrint(trie, output);
         destoryTrie(trie);

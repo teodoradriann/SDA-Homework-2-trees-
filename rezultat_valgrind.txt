@@ -1,7 +1,0 @@
-==11613== 500 bytes in 250 blocks are definitely lost in loss record 1 of 1
-==11613==    at 0x4845828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==11613==    by 0x109A4E: createTrieNode (in /Users/adrian/Documents/facultate/sda/Tema 2/tema2)
-==11613==    by 0x109C58: insertByLetter (in /Users/adrian/Documents/facultate/sda/Tema 2/tema2)
-==11613==    by 0x1094B5: readData (in /Users/adrian/Documents/facultate/sda/Tema 2/tema2)
-==11613==    by 0x10995D: main (in /Users/adrian/Documents/facultate/sda/Tema 2/tema2)
-==11613== 

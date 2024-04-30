@@ -42,8 +42,8 @@ void insertByLetter(Trie trie, void *data) {
     int wordLength = strlen(word);
     char *endOfWord = malloc(2);
     checkMalloc(endOfWord);
-    *endOfWord = '$';
-    *(endOfWord + 1) = '\0';
+    endOfWord[0] = '$';
+    endOfWord[1] = '\0';
     // daca trie-ul e gol, voi adauga direct $ care va ramane
     // acolo pe toata durata de viata a trie-ului deoarece
     // fiecare cuvant are un $ la sfarsit
@@ -249,57 +249,6 @@ void searchSuffix(TrieNode *node, char *word, int *i, FILE *file) {
     fprintf(file, "0\n");
 }
 
-void insertInCompactTrie(Trie trie, void *data) {
-    if (trie == NULL || data == NULL)
-        return;
-    if (trie->dataSize != sizeof(char *)) {
-        printf("Nu ai definit o trie cu suficient "
-        "spatiu in noduri pentru a fi compacta.\n");
-        return;
-    }
-    char *word = (char *)data;
-    int wordLength = strlen(word);
-    char *endOfWord = malloc(2);
-    checkMalloc(endOfWord);
-    endOfWord[0] = '$';
-    endOfWord[1] = '\0';
-    // daca trie-ul e gol, voi adauga direct $ care va ramane
-    // acolo pe toata durata de viata a trie-ului deoarece
-    // fiecare cuvant are un $ la sfarsit
-    if (trie->root->children[0] == NULL) {
-        trie->root->children[0] = createTrieNode(trie, endOfWord);
-        trie->nodeCount++;
-    }
-    for (int i = wordLength - 1; i >= 0; i--) {
-        // plec din root
-        TrieNode *node = trie->root;
-        int lenDataNode = 0;
-        char *suffix = word + i;
-        int firstLetter = suffix[0] - 'a' + 1;
-        if (node->children[firstLetter] == NULL) {
-            node->children[firstLetter] = createTrieNode(trie, suffix);
-            trie->nodeCount++;
-        } else {
-            while (node->children[firstLetter] != NULL) {
-                node = node->children[firstLetter];
-                lenDataNode = strlen((char *)node->data);
-                suffix = suffix + lenDataNode;
-                firstLetter = suffix[0] - 'a' + 1;
-            }
-            if (suffix[0] != '\0') {
-                node->children[firstLetter] = createTrieNode(trie, suffix);
-                trie->nodeCount++;
-            }
-        }
-        node = node->children[firstLetter];
-        if (node->children[0] == NULL) {
-            node->children[0] = createTrieNode(trie, endOfWord);
-            trie->nodeCount++;
-        }
-    }
-    free(endOfWord);
-}
-
 int numberOfChildren(TrieNode *node) {
     int cntr = 0;
     for (int i = 0; i < 27; i++){
@@ -309,8 +258,13 @@ int numberOfChildren(TrieNode *node) {
     return cntr;
 }
 
-void transformInCompactTrie(TrieNode *node) {
+void transformInCompactTrie(Trie trie, TrieNode *node) {
     if (node == NULL) {
+        return;
+    }
+    if (trie->dataSize != sizeof(char *)) {
+        printf("Nu ai definit o trie cu suficient "
+        "spatiu in noduri pentru a fi compacta.\n");
         return;
     }
     // caut un nod care nu e capat de sir si are doar 1 copil pt
@@ -341,11 +295,11 @@ void transformInCompactTrie(TrieNode *node) {
             // eliberez copilul si plec spre o noua cautare de compactare
             // din nodul mare
             free(child);
-            transformInCompactTrie(node);
+            transformInCompactTrie(trie, node);
         }
     }
     for (int i = 1; i < 27; i++) {
-        transformInCompactTrie(node->children[i]);
+        transformInCompactTrie(trie, node->children[i]);
     }
 }
 

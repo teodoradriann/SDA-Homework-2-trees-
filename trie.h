@@ -25,5 +25,6 @@ void getNumberOfKSuffixes(TrieNode *root, int k, int *numberOfLetters,
 void getMaxNumberOfChildren(TrieNode *root, int *maxChildren, FILE *file);
 void searchSuffix(TrieNode *root, char *word, int *i, FILE *file);
 void destoryTrie(Trie trie);
-void makeCompactTrie(Trie trie, char *data);
+void insertInCompactTrie(Trie trie, void *data);
+void transformInCompactTrie(TrieNode *node);
 #endif

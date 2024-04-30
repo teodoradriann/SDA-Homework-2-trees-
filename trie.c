@@ -249,7 +249,7 @@ void searchSuffix(TrieNode *node, char *word, int *i, FILE *file) {
     fprintf(file, "0\n");
 }
 
-void makeCompactTrie(Trie trie, char *data) {
+void insertInCompactTrie(Trie trie, void *data) {
     if (trie == NULL || data == NULL)
         return;
     if (trie->dataSize != sizeof(char *)) {
@@ -261,8 +261,8 @@ void makeCompactTrie(Trie trie, char *data) {
     int wordLength = strlen(word);
     char *endOfWord = malloc(2);
     checkMalloc(endOfWord);
-    *endOfWord = '$';
-    *(endOfWord + 1) = '\0';
+    endOfWord[0] = '$';
+    endOfWord[1] = '\0';
     // daca trie-ul e gol, voi adauga direct $ care va ramane
     // acolo pe toata durata de viata a trie-ului deoarece
     // fiecare cuvant are un $ la sfarsit
@@ -298,6 +298,55 @@ void makeCompactTrie(Trie trie, char *data) {
         }
     }
     free(endOfWord);
+}
+
+int numberOfChildren(TrieNode *node) {
+    int cntr = 0;
+    for (int i = 0; i < 27; i++){
+        if (node->children[i] != NULL)
+            cntr++;
+    }
+    return cntr;
+}
+
+void transformInCompactTrie(TrieNode *node) {
+    if (node == NULL) {
+        return;
+    }
+    // caut un nod care nu e capat de sir si are doar 1 copil pt
+    // a concatena copilul la el
+    int numberOfKids = numberOfChildren(node);
+    if (node->children[0] == NULL && numberOfKids == 1) {
+        TrieNode *child = NULL;
+        for (int i = 1; i < 27; i++) {
+            if (node->children[i] != NULL) {
+                child = node->children[i];
+                break;
+            }
+        }
+        if (child != NULL) {
+            // fac un nou sir compus din cele 2 noduri
+            char *newData = malloc(strlen((char *)node->data) + strlen((char *)child->data) + 1);
+            strcpy(newData, (char *)node->data);
+            strcat(newData, (char *)child->data);
+            newData[strlen(newData)] = '\0';
+            // inclouiesc vechiul data cu cel nou
+            free(node->data);
+            node->data = newData;
+            // vectorul de copii al copilului devine vectorul de copii
+            // al nodului mare
+            for (int i = 0; i < 27; i++) {
+                node->children[i] = child->children[i];
+            }
+            // eliberez copilul si plec spre o noua cautare de compactare
+            // din nodul mare
+            free(child);
+            transformInCompactTrie(node);
+        }
+    }
+    for (int i = 1; i < 27; i++) {
+        transformInCompactTrie(node->children[i]);
+    }
 }
 
 void destoryTrie(Trie trie) {

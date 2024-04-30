@@ -44,6 +44,8 @@ void insertByLetter(Trie trie, void *data) {
     checkMalloc(endOfWord);
     endOfWord[0] = '$';
     endOfWord[1] = '\0';
+    int i;
+    int j;
     // daca trie-ul e gol, voi adauga direct $ care va ramane
     // acolo pe toata durata de viata a trie-ului deoarece
     // fiecare cuvant are un $ la sfarsit
@@ -51,10 +53,10 @@ void insertByLetter(Trie trie, void *data) {
         trie->root->children[0] = createTrieNode(trie, endOfWord);
         trie->nodeCount++;
     }
-    for (int i = wordLength; i >= 0; i--) {
+    for (i = wordLength; i >= 0; i--) {
         // plec din root
         TrieNode *node = trie->root;
-        for (int j = i; j < wordLength; j++) {
+        for (j = i; j < wordLength; j++) {
             // calculez index-ul din vectorul children
             int index = word[j] - 'a' + 1;
             if (node->children[index] == NULL) {
@@ -86,8 +88,9 @@ void BFSPrint(Trie trie, FILE *file) {
     memset(queue, 0, trie->nodeCount * sizeof(TrieNode *));
     int front = 0;
     int rear = 0;
+    int i;
 
-    for (int i = 0; i < CHILDREN_NUMBER; i++) {
+    for (i = 0; i < CHILDREN_NUMBER; i++) {
         if (trie->root->children[i] != NULL) {
             queue[rear++] = trie->root->children[i];
         }
@@ -108,7 +111,7 @@ void BFSPrint(Trie trie, FILE *file) {
             }
         } else {
             fprintf(file, "%s ", (char *)node->data);
-            for (int i = 0; i < CHILDREN_NUMBER; i++) {
+            for (i = 0; i < CHILDREN_NUMBER; i++) {
                 if (node->children[i] != NULL) {
                     if (rear == trie->nodeCount) {
                         queue = realloc(queue, trie->nodeCount * 2 * sizeof(TrieNode*));
@@ -126,7 +129,8 @@ void BFSPrint(Trie trie, FILE *file) {
 void countLeafs(TrieNode *node, int *numberOfLeafs) {
     if (node == NULL)
         return;
-    for (int i = 0; i < CHILDREN_NUMBER; i++) {
+    int i;
+    for (i = 0; i < CHILDREN_NUMBER; i++) {
         if (node->children[i] != NULL) {
             if (node->children[i]->data != NULL) {
                 if (*(char *)node->children[i]->data == '$')
@@ -152,13 +156,14 @@ void countSuffixes(TrieNode *node, int k, int *numberOfLetters, int *numberOfSuf
     if (node == NULL)
         return;
 
+    int i;
     if (!node->isRoot) {
         if (*(char *)node->data == '$') {
             if (k == *numberOfLetters)
                 (*numberOfSuffixes)++;
         }
     }
-    for (int i = 0; i < CHILDREN_NUMBER; i++) {
+    for (i = 0; i < CHILDREN_NUMBER; i++) {
         if (node->children[i] != NULL) {
             if (node->children[i]->data != NULL) {
                 if (*(char *)node->children[i]->data != '$')
@@ -195,7 +200,8 @@ void countChildren(TrieNode *node, int *maxChildren) {
         return;
     
     int cntr = 0;
-    for (int i = 0; i < CHILDREN_NUMBER; i++) {
+    int i;
+    for (i = 0; i < CHILDREN_NUMBER; i++) {
         if (node->children[i] != NULL) {
             cntr++;
         }
@@ -204,7 +210,7 @@ void countChildren(TrieNode *node, int *maxChildren) {
     if (cntr > *maxChildren) 
         *maxChildren = cntr;
 
-    for (int i = 0; i < CHILDREN_NUMBER; i++) {
+    for (i = 0; i < CHILDREN_NUMBER; i++) {
         if (node->children[i] != NULL) {
            countChildren(node->children[i], maxChildren);
         }
@@ -235,7 +241,8 @@ void searchSuffix(TrieNode *node, char *word, int *i, FILE *file) {
             return;
         } 
     }
-    for (int j = 0; j < CHILDREN_NUMBER; j++) {
+    int j;
+    for (j = 0; j < CHILDREN_NUMBER; j++) {
         if (node->children[j] != NULL) {
             if (node->children[j]->data != NULL) {
                 if (*(char *)node->children[j]->data == word[*i]) {
@@ -251,7 +258,8 @@ void searchSuffix(TrieNode *node, char *word, int *i, FILE *file) {
 
 int numberOfChildren(TrieNode *node) {
     int cntr = 0;
-    for (int i = 0; i < 27; i++){
+    int i;
+    for (i = 1; i < CHILDREN_NUMBER; i++){
         if (node->children[i] != NULL)
             cntr++;
     }
@@ -262,6 +270,7 @@ void transformInCompactTrie(Trie trie, TrieNode *node) {
     if (node == NULL) {
         return;
     }
+    int i;
     if (trie->dataSize != sizeof(char *)) {
         printf("Nu ai definit o trie cu suficient "
         "spatiu in noduri pentru a fi compacta.\n");
@@ -272,7 +281,7 @@ void transformInCompactTrie(Trie trie, TrieNode *node) {
     int numberOfKids = numberOfChildren(node);
     if (node->children[0] == NULL && numberOfKids == 1) {
         TrieNode *child = NULL;
-        for (int i = 1; i < 27; i++) {
+        for (i = 1; i < CHILDREN_NUMBER; i++) {
             if (node->children[i] != NULL) {
                 child = node->children[i];
                 break;
@@ -289,16 +298,17 @@ void transformInCompactTrie(Trie trie, TrieNode *node) {
             node->data = newData;
             // vectorul de copii al copilului devine vectorul de copii
             // al nodului mare
-            for (int i = 0; i < 27; i++) {
+            for (i = 0; i < CHILDREN_NUMBER; i++) {
                 node->children[i] = child->children[i];
             }
             // eliberez copilul si plec spre o noua cautare de compactare
             // din nodul mare
+            free(child->data);
             free(child);
             transformInCompactTrie(trie, node);
         }
     }
-    for (int i = 1; i < 27; i++) {
+    for (i = 1; i < CHILDREN_NUMBER; i++) {
         transformInCompactTrie(trie, node->children[i]);
     }
 }
@@ -309,8 +319,9 @@ void destoryTrie(Trie trie) {
     memset(queue, 0, trie->nodeCount * sizeof(TrieNode*));
     int front = 0;
     int rear = 0;
+    int i;
 
-    for (int i = 0; i < CHILDREN_NUMBER; i++) {
+    for (i = 0; i < CHILDREN_NUMBER; i++) {
         if (trie->root->children[i] != NULL) {
             queue[rear++] = trie->root->children[i];
         }
@@ -321,7 +332,7 @@ void destoryTrie(Trie trie) {
         if (node->data != NULL) {
             free(node->data);
         }
-        for (int i = 0; i < CHILDREN_NUMBER; i++) {
+        for (i = 0; i < CHILDREN_NUMBER; i++) {
             if (node->children[i] != NULL) {
                 queue[rear++] = node->children[i];
             }

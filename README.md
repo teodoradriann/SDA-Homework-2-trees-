@@ -44,8 +44,3 @@ a-r, ceea ce ar fi fost mult mai dificil de facut. Avand acestea in minte am dec
 abordarea si am pornit pe fiecare ramura a arboreului in cautarea unui nod care nu e sfarsit
 de cuvant si care are doar 1 copil, apoi am concatenat copilul la nodul respectiv si am transferat
 vectorul de copii al copilului nodului in cauza. Apoi pornesc recursiv din nou din nodul cel mare in cautarea altui copil.
-
-Tema mi-a placut, o singura problema am avut, la taskul 4 local valgrind-ul local rulat cu aceleasi
-rules imi da 0 leaks si nicio eroare insa valgrind-ul rulat cu ./checker.sh imi da ceva eroare la alocarea
-nodurlior care mi se pare putin ciudat pt ca ar fi trb. sa imi dea aceeasi eroare si pentru celalate taskuri
-ma gandesc.. Nu stiu exact ce se intampla acolo, poate o sa poata sa ma lamureasca cineva :)

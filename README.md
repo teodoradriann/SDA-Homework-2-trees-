@@ -1,46 +1,24 @@
-Aceasta este implementarea mea pentru Tema 2
+This is my implementation for the second homework project of Data Structures and Algorithms.
 
-Am ales sa ridic dificulatatea temei prin a folosi date generice de tip void *
-pentru a-mi consolida mai bine cunostinele. Am ales sa imi modularizez codul cat mai mult
-pentru a fi usor de citit si inteles, fiecare parte din program avand functia/fisierul ei.
-Cred ca tema mea se distinge de celelate teme prin aceste abordari + prin faptul ca fiecare
-variabila este alocata dinamic si memoria este folosita foarte eficient.
+I chose to increase the difficulty of the assignment by using generic void * data types to further solidify my understanding. I decided to modularize my code as much as possible to make it easy to read and understand, with each part of the program having its own function/file. I believe my approach stands out from other assignments due to these strategies, plus the fact that every variable is dynamically allocated, and memory is used very efficiently.
 
+In main.c, I only handle reading from files and data processing.
+In train.c, I have all the functions that deal with trie management.
+In utils.c, I have functions that I use frequently to check dynamic allocations or the existence of files.
 
-In main.c am doar citirea din fisiere si prelucrarea datelor.
-In train.c am fiecare functie care se ocupa cu managementul triei.
-In utils.c am functii pe care le folsoesc des pentru a da check la alocarile dinamice
-sau la existenta fisierelor.
+Task 1
 
-
-Taskul 1
-
-Am implementat taskul 1 printr-o metoda simpla prin care am inceput
-iteratiile de la finalul cuvant si creand un nod nou pentru fiecare litera
-din sufix care nu se afla in arbore. Daca gaseam o litera care exista deja parcurgeam
-arborele pana in acel punct.
-Pentru printarea arborelui am folosit un BFS clasic folosind o coada pe care am alocat-o dinamic
-in functie de cate frunze are arborele, si am tot marit-o pe parcurs deoarece trebuia sa adaug si 
-\n.
+I implemented Task 1 using a simple method where I started iterations from the end of the word and created a new node for each suffix letter that wasn’t already in the trie. If I found a letter that already existed, I traversed the trie up to that point. For printing the trie, I used a classic BFS, utilizing a queue that I dynamically allocated based on the number of leaves the trie had, and I expanded it as needed because I also had to add \n.
 
 Task 2
 
-Pentru fiecare subpunct am folosit implementari recursive prin care parcurg arborele si
-verific fiecare cerinta. Am facut o implemetare frumoasa deoarece am scris codul in asa fel
-incat utilizatorul sa nu fie lasat sa foloseasca un alt nod de inceput fata de radacina.
+For each subtask, I used recursive implementations to traverse the trie and check each requirement. I implemented it in such a way that the user is not allowed to use a different starting node other than the root.
 
 Task 3
 
-Pentru implementarea taskului 3 am folosit tot o metoda recursiva in care caut fiecare litera
-din sufix in noduri si acutalizez indicele literei. Daca i este la fel de lung ca si cuvantul
-si in nodul in care ma aflu exista $ inseamna ca am gasit acel sufix.
+For the implementation of Task 3, I also used a recursive method in which I searched for each suffix letter in the nodes and updated the index of the letter. If i was as long as the word and the node I was in contained $, it meant that I had found that suffix.
 
 Task 4
 
-Pentrul taskul 4 am incercat prima data o implementare prin care fac direct tria compacta
-insa mi-am dat seama ca nu e o metoda fiabila deoarece daca am apple, cuvant pe care eu in metoda mea
-l-as fi adaugat direct ca si cuvant, apoi un sufix ar, ar fi trbuit sa sparg apple in a-pple ca sa adaug
-a-r, ceea ce ar fi fost mult mai dificil de facut. Avand acestea in minte am decis sa schimb
-abordarea si am pornit pe fiecare ramura a arboreului in cautarea unui nod care nu e sfarsit
-de cuvant si care are doar 1 copil, apoi am concatenat copilul la nodul respectiv si am transferat
-vectorul de copii al copilului nodului in cauza. Apoi pornesc recursiv din nou din nodul cel mare in cautarea altui copil.
+For Task 4, I initially tried an implementation that directly created the compact trie. However, I realized this method was not feasible because, if I had the word “apple” (a word that in my method I would have added directly as a word), and then a suffix “ar” was added, I would have had to split “apple” into “a-pple” to add “a-r,” which would have been much more difficult to do. With this in mind, I decided to change my approach and started traversing each branch of the trie, looking for a node that wasn’t the end of a word and that had only one child. I then concatenated the child to the respective node and transferred the child node’s vector of children to the parent node. After that, I recursively started again from the larger node, searching for another child.
+
